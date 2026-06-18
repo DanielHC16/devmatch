@@ -1,8 +1,9 @@
-import { Controller, Get, Query, Param, Post, Body, Put, Delete, HttpCode, HttpStatus, HttpException, NotFoundException, ParseUUIDPipe, ValidationPipe} from '@nestjs/common';
+import { Controller, Get, Query, Param, Post, Body, Put, Delete, HttpCode, HttpStatus, HttpException, NotFoundException, ParseUUIDPipe, ValidationPipe, UseGuards} from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfilesService } from './profiles.service';
 import type { UUID } from 'crypto';
+import { ProfilesGuard } from './profiles.guard';
 
 // A query parameter is a key-value pair that is appended to the end of a URL. In this case, the @Query() decorator is used to extract query parameters from the request URL. The findAll() method can accept query parameters to filter or modify the response.
 // Param is used to extract route parameters from the URL. For example, if you have a route defined as /profiles/:id, you can use the @Params() decorator to extract the id parameter from the URL and use it in your controller method.
@@ -54,6 +55,7 @@ constructor(private profilesService: ProfilesService){} // The constructor of th
 
   // DELETE /profiles/:id
   @Delete(':id') // The @Delete(':id') decorator indicates that the remove() method should handle DELETE requests to the /profiles/:id endpoint, where :id is a route parameter that can be accessed using the @Params() decorator.
+  @UseGuards(ProfilesGuard) // The @UseGuards(ProfilesGuard) decorator is used to apply the ProfilesGuard to the remove() method. Guards in NestJS are used to implement authorization and authentication logic. By applying the ProfilesGuard, you can control access to the remove() method based on certain conditions, such as user roles or permissions. The guard will be executed before the method is called, and if the guard returns false, the request will be denied and a 403 Forbidden response will be returned.
   @HttpCode(HttpStatus.NO_CONTENT) // The @HttpCode(HttpStatus.NoContent) decorator is used to set the HTTP status code of the response. In this case, it sets the status code to 204 (No Content) for successful deletion.
   remove(@Param('id', ParseUUIDPipe) id: UUID){
     return this.profilesService.delete(id); // The remove() method takes the id parameter from the URL and returns it in the response. In a real application, you would typically use this id to delete the corresponding profile from a database or another data source.
