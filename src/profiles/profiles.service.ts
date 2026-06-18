@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreateProfileDto } from './dto/create-profile.dto';
 
+// NotFounndException - The NotFoundException class is provided by NestJS and allows you to create custom error responses for your API endpoints. When you throw a NotFoundException, it will automatically return a response with a 404 status code and a message indicating that the requested resource was not found. This is useful for handling cases where a client requests a resource that does not exist in the database or data source.
+
 @Injectable() // The @Injectable() decorator is used to mark the ProfilesService class as a provider that can be injected into other parts of the application. This allows you to use dependency injection to manage the lifecycle of the service and its dependencies. In a real application, you would typically implement methods in the ProfilesService class to handle business logic related to profiles, such as fetching profiles from a database, creating new profiles, updating existing profiles, and deleting profiles. The service would then be injected into the ProfilesController to handle incoming requests and return responses based on the business logic defined in the service.
 export class ProfilesService {
     private profiles = [
