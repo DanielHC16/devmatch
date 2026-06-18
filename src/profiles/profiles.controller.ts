@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Param, Post, Body, Put, Delete, HttpCode, HttpStatus} from '@nestjs/common';
+import { Controller, Get, Query, Param, Post, Body, Put, Delete, HttpCode, HttpStatus, HttpException, NotFoundException} from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfilesService } from './profiles.service';
@@ -24,7 +24,9 @@ constructor(private profilesService: ProfilesService){} // The constructor of th
 
   @Get(':id') // The @Get(':id') decorator indicates that the findOne() method should handle GET requests to the /profiles/:id endpoint, where :id is a route parameter that can be accessed using the @Params() decorator.
   findOne(@Param('id') id: string){
-    return this.profilesService.findOne(id); // The findOne() method takes the id parameter from the URL and returns it in the response. In a real application, you would typically use this id to fetch the corresponding profile from a database or another data source.
+  return this.profilesService.findOne(id); // The findOne() method takes the id parameter from the URL and returns it in the response. In a real application, you would typically use this id to fetch the corresponding profile from a database or another data source.
+  // throw new NotFoundException(); // The throw new NotFoundException('Not Found', HttpStatus.NOT_FOUND) line is used to throw a not found exception with a 404 status code. This is typically done when the requested resource (in this case, a profile with the specified id) is not found in the database or data source. The NotFoundException class is provided by NestJS and allows you to create custom error responses for your API endpoints.
+  
   }
 
   // POST /profiles
