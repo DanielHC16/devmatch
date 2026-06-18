@@ -1,0 +1,8 @@
+node_modules
+dist
+coverage
+.env
+.idea
+package-lock.json
+package.json
+tsconfig.json
