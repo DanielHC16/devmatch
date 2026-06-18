@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Param, Post, Body, Put, Delete, HttpCode, HttpStatus, HttpException, NotFoundException, ParseUUIDPipe} from '@nestjs/common';
+import { Controller, Get, Query, Param, Post, Body, Put, Delete, HttpCode, HttpStatus, HttpException, NotFoundException, ParseUUIDPipe, ValidationPipe} from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfilesService } from './profiles.service';
@@ -31,9 +31,10 @@ constructor(private profilesService: ProfilesService){} // The constructor of th
   }
 
   // POST /profiles
-  
+  // ValidationPipe - The ValidationPipe is a built-in pipe in NestJS that can be used to validate incoming request data. When you use the @Body(new ValidationPipe()) decorator, it will automatically validate the data in the request body against the defined DTO (Data Transfer Object) class. If the validation fails, it will throw an error and return a response with a 400 status code and details about the validation errors. This helps ensure that the data being sent in the request body adheres to the specified constraints before it is processed by the application.
+
   @Post() // The @Post() decorator indicates that the create() method should handle POST requests to the /profiles endpoint.
-  create(@Body() createProfileDto: CreateProfileDto){
+  create(@Body(new ValidationPipe()) createProfileDto: CreateProfileDto){
     // We're creating a new object here
     return this.profilesService.create(createProfileDto) // The create() method takes the data from the request body (createProfileDto) and returns it in the response. In a real application, you would typically use this data to create a new profile in a database or another data source.
     }
@@ -46,7 +47,7 @@ constructor(private profilesService: ProfilesService){} // The constructor of th
   @Put(':id') // The @Put(':id') decorator indicates that the update() method should handle PUT requests to the /profiles/:id endpoint, where :id is a route parameter that can be accessed using the @Params() decorator.
   update(
     @Param('id', ParseUUIDPipe) id: UUID, // The @Param('id', ParseUUIDPipe) decorator is used to extract the id parameter from the URL and validate it as a UUID. The ParseUUIDPipe is a built-in pipe in NestJS that checks if the provided value is a valid UUID and throws an error if it is not. This ensures that the id parameter is in the correct format before it is processed by the update() method.
-    @Body() updateProfileDto: UpdateProfileDto
+    @Body(new ValidationPipe()) updateProfileDto: UpdateProfileDto
   ){
     return this.profilesService.update(id, updateProfileDto); // The update() method takes the id parameter from the URL and the data from the request body (updateProfileDto) and returns it in the response. In a real application, you would typically use this data to update an existing profile in a database or another data source.
   }
